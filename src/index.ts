@@ -6,7 +6,13 @@ import axios from 'axios';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 async function generateImage(prompt: string) {
@@ -31,7 +37,11 @@ async function generateImage(prompt: string) {
   }
 }
 
-app.post('/api/generate-image', async (req, res) => {
+app.get('/',(req,res)=>{
+  res.send("Hello World")
+})
+
+app.post('/', async (req, res) => {
   try {
     const { prompt } = req.body;
     const { imageBuffer, contentType } = await generateImage(prompt);
